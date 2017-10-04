@@ -52,7 +52,7 @@ export default
                                 Wait('stop');
                             }
                         })
-                        .error(function(obj, status) {
+                        .catch(({obj, status}) => {
                             Wait('stop');
                             $('#prompt-modal').modal('hide');
                             if (status === 403) {
@@ -81,7 +81,7 @@ export default
                                 Wait('stop');
                             }
                         })
-                        .error(function (obj, status) {
+                        .catch(({obj, status}) => {
                             Wait('stop');
                             $('#prompt-modal').modal('hide');
                             if (status === 403) {
@@ -127,7 +127,7 @@ export default
                             scope.$emit('CancelNotAllowed');
                         }
                     })
-                    .error(function(data, status) {
+                    .catch(({data, status}) => {
                         ProcessErrors(scope, data, status, null, { hdr: 'Error!', msg: 'Call to ' + url +
                             ' failed. GET returned: ' + status });
                     });
