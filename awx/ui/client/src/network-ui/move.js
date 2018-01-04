@@ -171,7 +171,8 @@ _Ready.prototype.onPasteDevice = function (controller, msg_type, message) {
                                scope.scaledX,
                                scope.scaledY,
                                message.device.type,
-                               message.device.host_id);
+                               message.device.host_id,
+                               message.device.variables);
     scope.devices.push(device);
     c_messages.push(new messages.DeviceCreate(scope.client_id,
                                               device.id,

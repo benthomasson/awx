@@ -184,7 +184,7 @@ var NetworkUIController = function($scope, $document, $location, $window, $http,
                    let host = hosts[i];
                    console.log(host);
                    host.data = jsyaml.safeLoad(host.variables);
-                   var device = new models.Device(0, host.data.name, 0, 0, host.data.type, host.id);
+                   var device = new models.Device(0, host.data.name, 0, 0, host.data.type, host.id, host.variables);
                    device.icon = true;
                    $scope.inventory_toolbox.items.push(device);
                }
@@ -620,23 +620,17 @@ var NetworkUIController = function($scope, $document, $location, $window, $http,
 	  $event.preventDefault();
 	};
 
+    $scope.$watchCollection('selected_items', function(){
+        $scope.onDetailsContextButton(false);
+    });
     // Conext Menu Button Handlers
-    $scope.onDetailsContextButton = function (button) {
-        console.log(button.name);
+    $scope.onDetailsContextButton = function (panelBoolean) {
         if (!$scope.disconnected) {
             if($scope.selected_items.length === 1){
-                let host_id = $scope.selected_items[0].host_id;
-                let url = `/api/v2/hosts/${host_id}/?format=json`;
-                $http.get(url)
-                     .then(function(host) {
-                         $scope.$emit('retrievedHostData', host.data);
-                         $scope.context_menus[0].enabled = false;
-                     })
-                     .catch(function(error) {
-                         console.log(error);
-                     });
+                let item = $scope.selected_items[0];
+                $scope.$emit('retrievedHostData', item, panelBoolean !== null ? panelBoolean: true);
+                $scope.context_menus[0].enabled = false;
             }
-
          }
     };
 

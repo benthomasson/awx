@@ -4,10 +4,11 @@ var button = require('./button.js');
 var util = require('./util.js');
 var inherits = require('inherits');
 
-function Device(id, name, x, y, type, host_id) {
+function Device(id, name, x, y, type, host_id, variables) {
     this.id = id;
     this.host_id = host_id ? host_id: 0;
     this.name = name;
+    this.variables = variables ? variables: null;
     this.x = x;
     this.y = y;
     this.height = type === "host" ? 15 : 50;
