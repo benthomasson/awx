@@ -106,6 +106,7 @@ class _TestPersistence(object):
                                                                  commits_since=int(commits_since),
                                                                  commit_hash=commit_hash)
 
+        logger.error("TR: %s", test_result)
         tr = TestResult(id=test_result['id'],
                         result_id=Result.objects.get(name=test_result['result']).pk,
                         test_case_id=TestCase.objects.get(name=test_result['name']).pk,

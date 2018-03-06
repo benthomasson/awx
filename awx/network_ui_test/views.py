@@ -72,7 +72,7 @@ def download_recording(request):
 def tests(request):
     tests = list(TestCase.objects.all().values('test_case_id', 'name'))
     for x in tests:
-        x['coverage'] = "/network_ui/download_coverage/{0}".format(x['test_case_id'])
+        x['coverage'] = "/network_ui_test/download_coverage/{0}".format(x['test_case_id'])
     return JsonResponse(dict(tests=tests))
 
 
@@ -97,10 +97,10 @@ def upload_test(request):
             name = form.cleaned_data['name']
             data = json.loads(request.FILES['file'].read())
             create_test(name, data)
-            return HttpResponseRedirect('/network_ui/tests')
+            return HttpResponseRedirect('/network_ui_test/tests')
     else:
         form = UploadTestForm()
-    return render(request, 'network_ui/upload_test.html', {'form': form})
+    return render(request, 'network_ui_test/upload_test.html', {'form': form})
 
 
 def download_coverage(request, pk):

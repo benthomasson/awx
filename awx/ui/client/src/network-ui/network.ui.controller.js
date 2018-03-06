@@ -904,7 +904,7 @@ var NetworkUIController = function($scope,
 
         $scope.test_results = [];
         $scope.current_tests = $scope.tests.slice();
-        $scope.first_channel.send("EnableTest", new messages.EnableTest());
+        $scope.test_channel.send("EnableTest", new messages.EnableTest());
     };
 
     $scope.all_buttons = [];
