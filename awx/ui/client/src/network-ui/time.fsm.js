@@ -2,7 +2,6 @@
 var inherits = require('inherits');
 var fsm = require('./fsm.js');
 var util = require('./util.js');
-var models = require('./models.js');
 
 function _State () {
 }
@@ -224,18 +223,10 @@ _Present.prototype.onMouseWheelEvent = function(controller, msg_type, message) {
         }
 };
 
-_Present.prototype.onTestCase = function(controller, msg_type, message) {
-    if ('runnable' in message[1]) {
-        if (!message[1].runnable) {
-            return;
-        }
-    }
-    controller.scope.tests.push(new models.Test(message[0],
-                                                message[1].event_trace,
-                                                [],
-                                                message[1].snapshots[0],
-                                                message[1].snapshots[1]));
-};
+_Present.prototype.onTestCompleted = function(controller, msg_type, message) {
+
+    controller.scope.test_channel.send(msg_type, message);
+}
 
 _Present.prototype.onError = function(controller, msg_type, message) {
     throw new Error("ServerError: " + message);
