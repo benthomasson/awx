@@ -226,7 +226,7 @@ _Present.prototype.onMouseWheelEvent = function(controller, msg_type, message) {
 _Present.prototype.onTestCompleted = function(controller, msg_type, message) {
 
     controller.scope.test_channel.send(msg_type, message);
-}
+};
 
 _Present.prototype.onError = function(controller, msg_type, message) {
     throw new Error("ServerError: " + message);
