@@ -6,6 +6,7 @@ from django.db import migrations
 
 import json
 
+
 def add_load_test_case(apps, schema_editor):
 
     TestCase = apps.get_model('network_ui_test', 'TestCase')
