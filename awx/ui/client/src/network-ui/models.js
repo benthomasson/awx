@@ -69,18 +69,6 @@ Interface.prototype.toJSON = function () {
             name: this.name};
 };
 
-Interface.prototype.remote_interface = function () {
-
-    if (this.link === null) {
-        return null;
-    }
-    if (this.link.to_interface === this) {
-        return this.link.from_interface;
-    } else {
-        return this.link.to_interface;
-    }
-};
-
 Interface.prototype.is_selected = function (x, y) {
 
     if (this.link === null || this.device === null) {

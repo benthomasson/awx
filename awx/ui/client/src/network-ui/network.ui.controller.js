@@ -703,7 +703,15 @@ var NetworkUIController = function($scope,
             index = $scope.devices.indexOf(devices[i]);
             if (index !== -1) {
                 $scope.devices.splice(index, 1);
+                $scope.devices_by_name[devices[i].name] = undefined;
                 $scope.$emit('awxNet-removeSearchOption', devices[i]);
+                devices[i].x = 0;
+                devices[i].y = 0;
+                devices[i].selected = false;
+                devices[i].remote_selected = false;
+                devices[i].interfaces = [];
+                devices[i].interfaces_by_name = [];
+                $scope.inventory_toolbox.items.push(devices[i]);
                 $scope.send_control_message(new messages.DeviceDestroy($scope.client_id,
                                                                        devices[i].id,
                                                                        devices[i].x,
