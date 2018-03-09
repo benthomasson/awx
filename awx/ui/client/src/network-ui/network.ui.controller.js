@@ -119,7 +119,9 @@ var NetworkUIController = function($scope,
   $scope.recording = false;
   $scope.replay = false;
   $scope.devices = [];
+  $scope.devices_by_name = {};
   $scope.links = [];
+  $scope.links_in_vars_by_device = {};
   $scope.tests = [];
   $scope.current_tests = [];
   $scope.current_test = null;
@@ -204,40 +206,69 @@ var NetworkUIController = function($scope,
            .then(function(response) {
                var devices_by_name = {};
                var i = 0;
+               var j = 0;
+               var link = null;
                for (i = 0; i < $scope.devices.length; i++) {
                    devices_by_name[$scope.devices[i].name] = $scope.devices[i];
                }
                let hosts = response.data.results;
+               console.log(hosts.length);
                for(i = 0; i<hosts.length; i++) {
+                   console.log(i);
                    try {
-                       var device_type = null;
-                       var device_name = null;
-                       var device = null;
+                       let device_type = null;
+                       let device_name = null;
+                       let device = null;
                        let host = hosts[i];
+                       device_name = host.name;
+                       console.log(device_name);
                        if (host.variables !== "") {
                            host.data = jsyaml.safeLoad(host.variables);
+                           console.log(host.data);
                        } else {
                            host.data = {};
                        }
-                       if (host.data.awx === undefined) {
+                       if (host.data.ansible_topology === undefined) {
                            device_type = 'unknown';
-                           device_name = host.name;
                        } else {
-                           if (host.data.awx.type === undefined) {
+                           if (host.data.ansible_topology.type === undefined) {
                                device_type = 'unknown';
                            } else {
-                               device_type = host.data.awx.type;
+                               device_type = host.data.ansible_topology.type;
                            }
-                           if (host.data.awx.name === undefined) {
-                               device_name = host.name;
-                           } else {
-                               device_name = host.data.awx.name;
+                           if (host.data.ansible_topology.links !== undefined) {
+                               for (j=0; j < host.data.ansible_topology.links.length; j++) {
+                                   link = host.data.ansible_topology.links[j];
+                                   if (link.remote_device_name !== undefined &&
+                                       link.remote_interface_name !== undefined &&
+                                       link.name !== undefined) {
+                                        if ($scope.links_in_vars_by_device[device_name] === undefined) {
+                                            $scope.links_in_vars_by_device[device_name] = [];
+                                        }
+                                        if ($scope.links_in_vars_by_device[link.remote_device_name] === undefined) {
+                                            $scope.links_in_vars_by_device[link.remote_device_name] = [];
+                                        }
+                                        $scope.links_in_vars_by_device[device_name].push({
+                                            from_interface: link.name,
+                                            to_interface: link.remote_interface_name,
+                                            from_device: device_name,
+                                            to_device: link.remote_device_name
+                                        });
+                                        $scope.links_in_vars_by_device[link.remote_device_name].push({
+                                            from_interface: link.remote_interface_name,
+                                            to_interface: link.name,
+                                            from_device: link.remote_device_name,
+                                            to_device: device_name
+                                        });
+                                   }
+                               }
                            }
                        }
                        if (devices_by_name[device_name] === undefined) {
+                           console.log(['adding', device_name]);
                            device = new models.Device(0, device_name, 0, 0, device_type, host.id);
                            device.icon = true;
-                           device.variables = JSON.stringify(host.data);
+                           device.variables = host.data;
                            $scope.inventory_toolbox.items.push(device);
                        }
                    } catch (error) {
@@ -825,6 +856,7 @@ var NetworkUIController = function($scope,
                                        data.host_id);
         $scope.device_id_seq = util.natural_numbers(data.id);
         $scope.devices.push(device);
+        $scope.devices_by_name[device.name] = device;
     };
 
     $scope.onInterfaceCreate = function(data) {
@@ -844,6 +876,7 @@ var NetworkUIController = function($scope,
     };
 
     $scope.onLinkCreate = function(data) {
+        console.log(data);
         $scope.create_link(data);
     };
 
@@ -875,6 +908,7 @@ var NetworkUIController = function($scope,
                 }
             }
         }
+        console.log(new_link);
         if (new_link.from_interface !== null && new_link.to_interface !== null) {
             new_link.from_interface.dot();
             new_link.to_interface.dot();
@@ -1054,6 +1088,7 @@ var NetworkUIController = function($scope,
             new_device.interface_seq = util.natural_numbers(device.interface_id_seq);
             new_device.process_id_seq = util.natural_numbers(device.process_id_seq);
             $scope.devices.push(new_device);
+            $scope.devices_by_name[new_device.name] = new_device;
             device_map[device.id] = new_device;
             device_interface_map[device.id] = {};
             for (j = 0; j < device.interfaces.length; j++) {
@@ -1063,6 +1098,7 @@ var NetworkUIController = function($scope,
                 new_intf.device = new_device;
                 device_interface_map[device.id][intf.id] = new_intf;
                 new_device.interfaces.push(new_intf);
+                new_device.interfaces_by_name[new_intf.name] = new_intf;
             }
         }
 
