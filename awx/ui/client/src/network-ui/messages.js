@@ -160,12 +160,14 @@ function StopRecording(sender, trace_id) {
 }
 exports.StopRecording = StopRecording;
 
-function ViewPort(sender, scale, panX, panY, trace_id) {
+function ViewPort(sender, scale, panX, panY, graph_width, graph_height, trace_id) {
     this.msg_type = "ViewPort";
     this.sender = sender;
     this.scale = scale;
     this.panX = panX;
     this.panY = panY;
+    this.graph_width = graph_width;
+    this.graph_height = graph_height;
     this.trace_id = trace_id;
 }
 exports.ViewPort = ViewPort;
@@ -186,16 +188,6 @@ function FSMTrace(order, fsm_name, from_state, to_state, recv_message_type) {
     this.recv_message_type = recv_message_type;
 }
 exports.FSMTrace = FSMTrace;
-
-function ChannelTrace(from_fsm, to_fsm, sent_message_type) {
-    this.msg_type = 'ChannelTrace';
-    this.sender = 0;
-    this.trace_id = 0;
-    this.from_fsm = from_fsm;
-    this.to_fsm = to_fsm;
-    this.sent_message_type = sent_message_type;
-}
-exports.ChannelTrace = ChannelTrace;
 
 function Snapshot(sender, devices, links, inventory_toolbox, order, trace_id) {
     this.msg_type = 'Snapshot';

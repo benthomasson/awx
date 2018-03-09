@@ -103,6 +103,7 @@ _Ready.prototype.onPasteDevice = function (controller, msg_type, message) {
                                message.device.type,
                                message.device.host_id);
     device.variables = message.device.variables;
+    scope.update_links_in_vars_by_device(device.name, device.variables);
     scope.devices.push(device);
     scope.devices_by_name[message.device.name] = device;
     c_messages.push(new messages.DeviceCreate(scope.client_id,
