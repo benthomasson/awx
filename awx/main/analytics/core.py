@@ -86,10 +86,6 @@ def gather(dest=None, module=None, collection_type='scheduled'):
         last_run = max_interval
 
 
-    if _valid_license() is False:
-        logger.exception("Invalid License provided, or No License Provided")
-        return "Error: Invalid License provided, or No License Provided"
-    
     if not settings.INSIGHTS_TRACKING_STATE:
         logger.error("Insights analytics not enabled")
         return
