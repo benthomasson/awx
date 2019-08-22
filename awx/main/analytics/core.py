@@ -53,7 +53,7 @@ def register(key):
     return decorate
 
 
-def gather(dest=None, module=None):
+def gather(dest=None, module=None, collection_type='scheduled'):
     """
     Gather all defined metrics and write them as JSON files in a .tgz
 
@@ -91,7 +91,11 @@ def gather(dest=None, module=None):
             path = '{}.json'.format(os.path.join(dest, key))
             with open(path, 'w', encoding='utf-8') as f:
                 try:
-                    json.dump(func(last_run), f)
+                    print(func)
+                    if func.__name__ == 'query_info':
+                        json.dump(func(last_run, collection_type=collection_type), f)
+                    else:
+                        json.dump(func(last_run), f)
                 except Exception:
                     logger.exception("Could not generate metric {}.json".format(key))
                     f.close()

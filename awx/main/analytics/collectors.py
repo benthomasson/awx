@@ -206,6 +206,30 @@ def job_instance_counts(since):
         counts.setdefault(job[0], {}).setdefault('status', {})[job[1]] = job[2]
     return counts
 
+@register('query_info')
+def query_info(since, collection_type):
+    query_info = {}
+    query_info['last_run'] = str(since)
+    query_info['current_time'] = str(now())
+    query_info['collection_type'] = collection_type
+    return query_info
+
+
+@register('manifest')
+def manifest(since):
+    versions = {
+                'config.json': 1.0,
+                'counts.json': 1.0,
+                'query_info.json': 1.0,
+                'cred_type_counts.json': 1.0,
+                'inventory_counts.json': 1.0,
+                'job_counts.json': 1.0,
+                'jobs.json': 1.0,
+                'org_counts.json': 1.0,
+                'projects_by_scm_type.json':1.0,
+                }
+    return versions
+    
 
 # Copies Job Events from db to a .csv to be shipped
 def copy_tables(since, full_path):
@@ -282,4 +306,3 @@ def copy_tables(since, full_path):
                                  ORDER BY main_unifiedjobtemplate.id ASC) TO STDOUT WITH CSV HEADER'''.format(since.strftime("'%Y-%m-%d %H:%M:%S'"))    
     _copy_table(table='unified_job_template', query=unified_job_template_query, path=full_path)
     return
-
