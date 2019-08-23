@@ -14,7 +14,7 @@ IMAGE_REPOSITORY_BASE ?= https://gcr.io
 VERSION := $(shell cat VERSION)
 
 # NOTE: This defaults the container image version to the branch that's active
-COMPOSE_TAG ?= $(GIT_BRANCH)
+COMPOSE_TAG ?= 'devel'
 COMPOSE_HOST ?= $(shell hostname)
 
 VENV_BASE ?= /venv
