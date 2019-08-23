@@ -55,6 +55,7 @@ def register(key, version):
 
     return decorate
 
+
 def table_version(file_name, version):
 
     global manifest
@@ -64,6 +65,7 @@ def table_version(file_name, version):
         return f
 
     return decorate
+
 
 def gather(dest=None, module=None, collection_type='scheduled'):
     """

@@ -206,6 +206,7 @@ def job_instance_counts(since):
         counts.setdefault(job[0], {}).setdefault('status', {})[job[1]] = job[2]
     return counts
 
+
 @register('query_info', '1.0')
 def query_info(since, collection_type):
     query_info = {}
