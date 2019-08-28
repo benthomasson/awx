@@ -643,7 +643,7 @@ PENDO_TRACKING_STATE = "off"
 
 # Enables Insights data collection for Ansible Tower.
 # Note: This setting may be overridden by database settings.
-INSIGHTS_TRACKING_STATE = False
+INSIGHTS_TRACKING_STATE = True
 
 
 # Default list of modules allowed for ad hoc commands.
@@ -935,8 +935,8 @@ TOWER_ADMIN_ALERTS = True
 # Note: This setting may be overridden by database settings.
 TOWER_URL_BASE = "https://towerhost"
 
-INSIGHTS_URL_BASE = "https://example.org"
-INSIGHTS_AGENT_MIME = 'application/example'
+INSIGHTS_URL_BASE = 'https://cloud.redhat.com'
+INSIGHTS_AGENT_MIME = 'application/vnd.redhat.tower.analytics+tgz'
 
 TOWER_SETTINGS_MANIFEST = {}
 
